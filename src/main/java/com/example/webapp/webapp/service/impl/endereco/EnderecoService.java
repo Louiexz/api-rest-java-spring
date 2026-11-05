@@ -1,9 +1,7 @@
-package com.example.webapp.webapp.service.impl;
+package com.example.webapp.webapp.service.impl.endereco;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.webapp.webapp.model.Endereco;
 import com.example.webapp.webapp.repository.EnderecoRepository;
@@ -29,22 +27,19 @@ public class EnderecoService implements IEnderecoService {
         enderecosRepositorio.save(endereco);
 
         return endereco;
-    }
-
-    public void getCepNaoEncontradoException(String cep) {
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "CEP não encontrado: " + cep);
-    }
+    }    
 
     @Override
     public Endereco procurarPorCep(String cep) {
-        Endereco endereco = enderecosRepositorio.findById(cep)
-            .orElseGet(() -> viaCepService.consultarCep(cep));
-
-        if (endereco == null && endereco.getCep() == null) {
-            getCepNaoEncontradoException(cep);
-        }
-
+        Endereco endereco = enderecosRepositorio
+            .findById(cep)
+            .orElseGet(() -> { 
+                try {
+                    return viaCepService.consultarCep(cep);
+                } catch (Exception e) {
+                    throw new EnderecoNaoEncontradoException(cep);
+                }
+            });
         return endereco;
     }
 

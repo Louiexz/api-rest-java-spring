@@ -1,0 +1,10 @@
+package com.example.webapp.webapp.service.impl.cliente;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class DeleteClienteById extends ClienteService {
+    public void deletarPorId(Long id) {        
+        clientesRepositorio.deleteById(id);
+    }
+}

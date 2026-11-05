@@ -113,5 +113,5 @@ public class Endereco {
         return "Endereco [cep=" + cep + ", logradouro=" + logradouro + ", complemento=" + complemento + ", unidade="
                 + unidade + ", bairro=" + bairro + ", localidade=" + localidade + ", uf=" + uf + ", estado=" + estado
                 + ", regiao=" + regiao + "]";
-    }    
+    }
 }

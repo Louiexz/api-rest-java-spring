@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.webapp.webapp.model.Endereco;
-import com.example.webapp.webapp.service.impl.EnderecoService;
+import com.example.webapp.webapp.service.impl.endereco.EnderecoService;
 
 import jakarta.validation.constraints.Pattern;
 

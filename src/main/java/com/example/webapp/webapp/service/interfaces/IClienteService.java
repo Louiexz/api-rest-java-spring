@@ -1,24 +1,33 @@
 package com.example.webapp.webapp.service.interfaces;
-import com.example.webapp.webapp.model.DTO.ClienteDTO.ClienteCreateRequest;
-import com.example.webapp.webapp.model.DTO.ClienteDTO.ClienteResponse;
-import com.example.webapp.webapp.model.DTO.ClienteDTO.ClienteUpdateRequest;
 import com.example.webapp.webapp.model.DTO.EnderecoDTO;
+import com.example.webapp.webapp.model.DTO.cliente.ClienteRequest;
+import com.example.webapp.webapp.model.DTO.cliente.ClienteResponse;
 import com.example.webapp.webapp.model.Endereco;
 
-public interface IClienteService {
-    public void salvar(ClienteCreateRequest entity);
+public abstract class IClienteService {
+    public void salvar(ClienteRequest entity){};
 
-    public ClienteResponse atualizarPorId(Long id, ClienteUpdateRequest cliente);
+    public ClienteResponse atualizarPorId(Long id, ClienteRequest cliente){
+        return null;
+    };
 
-    public ClienteResponse procurarPorId(Long id);
+    public ClienteResponse procurarPorId(Long id){
+        return null;
+    };
 
-    public Iterable<ClienteResponse> procurarTodos();;
+    public Iterable<ClienteResponse> procurarTodos(){
+        return null;
+    };
 
-    public void deletarPorId(Long id);
+    public void deletarPorId(Long id){};
 
-    public Endereco adicionarEnderecoPorCep(String cep);
+    public Endereco adicionarEnderecoPorCep(String cep){
+        return null;
+    };
 
-    public Endereco atualizarEnderecoPorCep(String cep, EnderecoDTO enderecoDTO);
+    public Endereco atualizarEnderecoPorCep(String cep, EnderecoDTO enderecoDTO){
+        return null;
+    };
 
-    public void removerEnderecoPorCep(String cep);
+    public abstract void removerEnderecoPorCep(String cep);
 }

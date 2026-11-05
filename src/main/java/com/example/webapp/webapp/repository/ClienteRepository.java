@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 import com.example.webapp.webapp.model.Cliente;
 
 @Repository
-public interface ClienteRepository extends CrudRepository<Cliente, Long> {
-}
+public interface ClienteRepository extends CrudRepository<Cliente, Long> {}
