@@ -16,6 +16,7 @@ Este projeto expõe endpoints para:
 - Java 25
 - Spring Boot 4.1.2
 - Spring Web MVC
+- Spring Security com autenticação JWT
 - Spring Data JPA
 - Spring Cloud OpenFeign
 - H2 Database
@@ -52,19 +53,20 @@ webapp/
 - JDK 25
 - Maven (ou use o wrapper do projeto `./mvnw`)
 - Internet para consultar o ViaCEP
+- Variável `JWT_SECRET` com uma chave de pelo menos 32 bytes, definida no ambiente ou em um arquivo `.env` na raiz do projeto
 
 ## Como executar
 
 Na raiz do projeto, execute:
 
 ```bash
-./mvnw spring-boot:run
+./mvnw -Dmaven.compiler.fork=true spring-boot:run
 ```
 
 No Windows:
 
 ```powershell
-mvnw.cmd spring-boot:run
+mvnw.cmd -Dmaven.compiler.fork=true spring-boot:run
 ```
 
 A aplicação inicia por padrão em:
@@ -100,7 +102,7 @@ Exemplo de criação de cliente:
   "nome": "Maria Souza",
   "email": "maria@email.com",
   "senha": "senha1234",
-  "enderecos": ["01001000", "01310970"]
+  "ceps": ["01001000", "01310970"]
 }
 ```
 
@@ -132,10 +134,38 @@ Exemplo de resposta:
 | POST | `/endereco/{cep}` | Busca e salva um endereço pelo CEP |
 | GET | `/endereco/{cep}` | Busca endereço por CEP |
 
-Exemplo de consulta:
+### Autenticação
+
+| Método | Endpoint | Descrição | Autenticação |
+|---|---|---|---|
+| POST | `/auth/login` | Autentica por nome ou e-mail e retorna um token JWT | Não |
+| POST | `/auth/logout` | Invalida o token enviado no cabeçalho `Authorization` | Sim |
+
+O cadastro de cliente (`POST /cliente`) e o login são públicos. Os demais
+endpoints exigem um token JWT válido, que expira após 10 minutos.
+
+Para autenticar pelo Swagger UI:
+
+1. Crie um cliente usando `POST /cliente`.
+2. Faça login em `POST /auth/login` com o nome ou e-mail e a senha:
+
+   ```json
+   {
+     "usuario": "maria@email.com",
+     "senha": "senha1234"
+   }
+   ```
+
+3. Copie o token retornado pelo login.
+4. Clique em **Authorize** no Swagger UI e cole o token. Não digite o prefixo
+   `Bearer `; o Swagger o adiciona automaticamente.
+5. Execute os endpoints protegidos.
+
+Exemplo de consulta autenticada com `curl`:
 
 ```bash
-curl http://localhost:8080/endereco/01001000
+curl -H "Authorization: Bearer <token>" \
+  http://localhost:8080/endereco/01001000
 ```
 
 ## Modelo de domínio
@@ -174,7 +204,7 @@ Campos principais:
 Para executar os testes:
 
 ```bash
-./mvnw test
+./mvnw -Dmaven.compiler.fork=true test
 ```
 
 ## Licença

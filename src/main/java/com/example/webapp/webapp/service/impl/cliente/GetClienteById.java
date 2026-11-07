@@ -7,7 +7,7 @@ import com.example.webapp.webapp.model.DTO.cliente.ClienteResponse;
 
 @Service
 public class GetClienteById extends ClienteService {
-    public ClienteResponse procurarPorId(Long id) {
+    public ClienteResponse execute(Long id) {
         Cliente cliente = getClienteById(id);
 
         return getClienteResponse(cliente);

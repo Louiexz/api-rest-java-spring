@@ -6,12 +6,12 @@ import com.example.webapp.webapp.model.Cliente;
 import com.example.webapp.webapp.model.DTO.EnderecoDTO;
 import com.example.webapp.webapp.model.DTO.cliente.ClienteResponse;
 import com.example.webapp.webapp.model.Endereco;
-import com.example.webapp.webapp.repository.ClienteRepository;
+import com.example.webapp.webapp.repository.ClienteRepositorio;
 import com.example.webapp.webapp.service.impl.endereco.EnderecoService;
 
 public class ClienteService {
     @Autowired
-    protected ClienteRepository clientesRepositorio;
+    protected ClienteRepositorio clientesRepositorio;
 
     @Autowired
     protected EnderecoService enderecosService;

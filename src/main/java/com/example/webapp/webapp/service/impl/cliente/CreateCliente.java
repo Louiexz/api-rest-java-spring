@@ -9,16 +9,22 @@ import com.example.webapp.webapp.model.DTO.cliente.ClienteRequest;
 
 @Service
 public class CreateCliente extends ClienteService {
-    public void salvar(ClienteRequest entity) {
+    public void execute(ClienteRequest entity) {
+        if (clientesRepositorio.findByEmail(entity.getEmail())!= null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "E-mail já cadastrado.");            
+        }
+
         Cliente cliente = new Cliente(entity.getNome(), entity.getEmail(), entity.getSenha());
-        
-        entity.getCeps().forEach(cep -> {
-            cliente.adicionarEndereco(enderecosService.salvar(cep.replace("\\D", "")));
-        });
+
+        if (entity.getCeps() != null) {        
+            entity.getCeps().forEach(cep -> {
+                cliente.adicionarEndereco(enderecosService.salvar(cep.replace("\\D", "")));
+            });
+        }
 
         if (clientesRepositorio.save(cliente) == null) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "O cliente não foi cadastrado");
+                HttpStatus.BAD_REQUEST, "O cliente não foi cadastrado");
         }
     }
 }

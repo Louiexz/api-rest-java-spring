@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.webapp.webapp.model.Endereco;
 import com.example.webapp.webapp.service.impl.endereco.EnderecoService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Pattern;
 
 @RestController
 @RequestMapping("endereco")
+@SecurityRequirement(name = "bearerAuth")
 public class EnderecoController {
     @Autowired
     private EnderecoService enderecoService;

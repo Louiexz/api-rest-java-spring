@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.webapp.webapp.model.Endereco;
-import com.example.webapp.webapp.repository.EnderecoRepository;
+import com.example.webapp.webapp.repository.EnderecoRepositorio;
 import com.example.webapp.webapp.service.interfaces.IEnderecoService;
 import com.example.webapp.webapp.service.interfaces.ViaCepService;
 
@@ -14,7 +14,7 @@ public class EnderecoService implements IEnderecoService {
     private ViaCepService viaCepService;
 
     @Autowired
-    private EnderecoRepository enderecosRepositorio;
+    private EnderecoRepositorio enderecosRepositorio;
 
     @Override
     public Endereco salvar(String cep) {

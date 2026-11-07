@@ -42,7 +42,7 @@ public class UpdateClienteById extends ClienteService {
         return clienteToUpdate.getEnderecos();
     }
     
-    public ClienteResponse atualizarPorId(Long id, ClienteRequest cliente, boolean isPut) {
+    public ClienteResponse execute(Long id, ClienteRequest cliente, boolean isPut) {        
         Cliente clienteToUpdate = getClienteById(id);
 
         if (cliente.getCeps() != null) {
