@@ -1,12 +1,11 @@
 package com.example.webapp.webapp.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,58 +18,57 @@ import com.example.webapp.webapp.model.DTO.cliente.ClienteResponse;
 import com.example.webapp.webapp.service.impl.cliente.CreateCliente;
 import com.example.webapp.webapp.service.impl.cliente.DeleteClienteById;
 import com.example.webapp.webapp.service.impl.cliente.GetClienteById;
-import com.example.webapp.webapp.service.impl.cliente.GetClientes;
 import com.example.webapp.webapp.service.impl.cliente.UpdateClienteById;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("cliente")
+@SecurityRequirement(name = "bearerAuth")
 public class ClienteController {
-    @Autowired
-    private CreateCliente createClienteService;
-    @Autowired
-    private GetClienteById getClienteByIdService;
-    @Autowired
-    private DeleteClienteById deleteClienteByIdService;
-    @Autowired
-    private GetClientes getClientesService;
-    @Autowired
-    private UpdateClienteById updateClienteByIdService;
+    private final CreateCliente createClienteService;
+    private final GetClienteById getClienteByIdService;
+    private final DeleteClienteById deleteClienteByIdService;
+    private final UpdateClienteById updateClienteByIdService;
 
-    @GetMapping
-    public ResponseEntity<Iterable<ClienteResponse>> procurarTodos() {
-        return ResponseEntity.ok(getClientesService.procurarTodos());
+    public ClienteController(CreateCliente createClienteService, DeleteClienteById deleteClienteByIdService, GetClienteById getClienteByIdService, UpdateClienteById updateClienteByIdService) {
+        this.createClienteService = createClienteService;
+        this.deleteClienteByIdService = deleteClienteByIdService;
+        this.getClienteByIdService = getClienteByIdService;
+        this.updateClienteByIdService = updateClienteByIdService;
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public void salvar(@Valid @RequestBody ClienteRequest cliente) {
-        createClienteService.salvar(cliente);
+        createClienteService.execute(cliente);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ClienteResponse> procurarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(getClienteByIdService.procurarPorId(id));
+    @GetMapping()
+    public ResponseEntity<ClienteResponse> procurarPorId(Authentication authentication) {
+        return ResponseEntity.ok(
+            getClienteByIdService.execute(Long.valueOf((String) authentication.getPrincipal())));
     }
     
-    @PatchMapping("/{id}")
+    @PatchMapping()
     @ResponseStatus(HttpStatus.OK)
-    public void atualizarPorIdPatch(@PathVariable Long id,
-                                    @RequestBody ClienteRequest cliente) {
-        updateClienteByIdService.atualizarPorId(id, cliente, false);
+    public void atualizarPorIdPatch(@RequestBody ClienteRequest cliente,
+            Authentication authentication) {
+        updateClienteByIdService.execute(Long.valueOf((String) authentication.getPrincipal()), cliente, false);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     @ResponseStatus(HttpStatus.OK)
-    public void atualizarPorIdPut(@PathVariable Long id,
-                                  @Valid @RequestBody ClienteRequest cliente) {
-        updateClienteByIdService.atualizarPorId(id, cliente, true);
+    public void atualizarPorIdPut(@Valid @RequestBody ClienteRequest cliente,
+            Authentication authentication) {
+        updateClienteByIdService.execute(
+            Long.valueOf((String) authentication.getPrincipal()), cliente, true);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletarPorId(@PathVariable Long id) {
-        deleteClienteByIdService.deletarPorId(id);
+    public void deletarPorId(Authentication authentication) {
+        deleteClienteByIdService.execute(Long.valueOf((String) authentication.getPrincipal()));
     }
 }

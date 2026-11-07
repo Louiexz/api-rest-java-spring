@@ -10,4 +10,11 @@ public class ClientNotFoundException extends ResponseStatusException {
             String.format("Cliente com ID %s não encontrado", id)
         );
     }
+    
+    public ClientNotFoundException() {
+        super(
+            HttpStatus.NOT_FOUND,
+            String.format("Cliente não encontrado")
+        );
+    }
 }
