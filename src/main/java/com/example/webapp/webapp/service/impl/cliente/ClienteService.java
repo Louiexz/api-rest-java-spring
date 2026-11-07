@@ -1,7 +1,6 @@
 package com.example.webapp.webapp.service.impl.cliente;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.example.webapp.webapp.model.Cliente;
 import com.example.webapp.webapp.model.DTO.EnderecoDTO;
@@ -10,7 +9,6 @@ import com.example.webapp.webapp.model.Endereco;
 import com.example.webapp.webapp.repository.ClienteRepository;
 import com.example.webapp.webapp.service.impl.endereco.EnderecoService;
 
-@Service
 public class ClienteService {
     @Autowired
     protected ClienteRepository clientesRepositorio;
@@ -27,10 +25,6 @@ public class ClienteService {
 
     public ClienteResponse getClienteResponse(Cliente cliente){
         return new ClienteResponse(cliente.getNome(), cliente.getEmail(), cliente.getEnderecos());
-    }
-
-    public Endereco adicionarEnderecoPorCep(String cep) {
-        return enderecosService.salvar(cep);
     }
 
     public Endereco atualizarEnderecoPorCep(String cep, EnderecoDTO enderecoDTO) {

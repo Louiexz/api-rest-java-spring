@@ -4,7 +4,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteClienteById extends ClienteService {
-    public void deletarPorId(Long id) {        
+    
+    public void deletarPorId(Long id) {      
+        getClienteById(id);
+
         clientesRepositorio.deleteById(id);
     }
 }

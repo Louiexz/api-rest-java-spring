@@ -11,9 +11,9 @@ import com.example.webapp.webapp.model.DTO.cliente.ClienteRequest;
 public class CreateCliente extends ClienteService {
     public void salvar(ClienteRequest entity) {
         Cliente cliente = new Cliente(entity.getNome(), entity.getEmail(), entity.getSenha());
-
-        entity.getEnderecos().forEach(endereco -> {
-            cliente.adicionarEndereco(adicionarEnderecoPorCep(endereco.replace("-", "")));
+        
+        entity.getCeps().forEach(cep -> {
+            cliente.adicionarEndereco(enderecosService.salvar(cep.replace("\\D", "")));
         });
 
         if (clientesRepositorio.save(cliente) == null) {

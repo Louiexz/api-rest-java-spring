@@ -12,7 +12,7 @@ public class ClienteRequest {
     private String nome;
     private String email;
     private String senha;
-    private List<String> enderecos;
+    private List<String> ceps;
 
     public ClienteRequest(){}        
 
@@ -39,12 +39,12 @@ public class ClienteRequest {
         @Pattern(
             regexp = "^\\d{5}-?\\d{3}$",
             message = "CEP inválido. Utilize 12345678 ou 12345-678.")
-        String> enderecos
+        String> ceps
     ) {
         this.nome = nome;
         this.email = email;
         this.senha = senha;
-        this.enderecos = enderecos;
+        this.ceps = ceps;
     }
 
     // Getters e Setters
@@ -57,6 +57,6 @@ public class ClienteRequest {
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 
-    public List<String> getEnderecos() { return enderecos; }
-    public void setEnderecos(List<String> enderecos) { this.enderecos = enderecos; }
+    public List<String> getCeps() { return ceps; }
+    public void setCeps(List<String> ceps) { this.ceps = ceps; }
 }

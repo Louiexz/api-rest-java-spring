@@ -26,7 +26,7 @@ public class Endereco {
 
     public Endereco(String cep, String logradouro, String complemento, String unidade, String bairro, String localidade, String uf, String estado, String regiao, String ibge, String gia, String ddd, String siafi) {
         this.bairro = bairro;
-        this.cep = cep;
+        this.cep = cep.replaceAll("\\D", "");
         this.complemento = complemento;
         this.estado = estado;
         this.localidade = localidade;
@@ -41,7 +41,7 @@ public class Endereco {
     }
 
     public void setCep(String cep) {
-        this.cep = cep;
+        this.cep = cep.replaceAll("\\D", "");
     }
 
     public String getLogradouro() {

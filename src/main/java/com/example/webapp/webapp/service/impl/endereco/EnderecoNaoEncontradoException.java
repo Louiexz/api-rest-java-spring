@@ -7,6 +7,6 @@ public class EnderecoNaoEncontradoException extends ResponseStatusException {
     public EnderecoNaoEncontradoException (String cep) {
         super(
                 HttpStatus.NOT_FOUND,
-                "CEP não encontrado: " + cep);
+                "Cep não encontrado: " + cep);
     }
 }

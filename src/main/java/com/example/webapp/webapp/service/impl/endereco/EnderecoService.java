@@ -50,6 +50,9 @@ public class EnderecoService implements IEnderecoService {
 
     @Override
     public void deletarPorCep(String cep) {
-        enderecosRepositorio.deleteById(cep);
+        String replacedCep = cep.replaceAll("\\D", "");
+        if (procurarPorCep(replacedCep) != null) {
+            enderecosRepositorio.deleteById(replacedCep);
+        }
     }
 }

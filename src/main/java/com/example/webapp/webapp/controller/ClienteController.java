@@ -28,7 +28,7 @@ import jakarta.validation.Valid;
 @RequestMapping("cliente")
 public class ClienteController {
     @Autowired
-    private CreateCliente createClienteService;    
+    private CreateCliente createClienteService;
     @Autowired
     private GetClienteById getClienteByIdService;
     @Autowired
@@ -58,14 +58,14 @@ public class ClienteController {
     @ResponseStatus(HttpStatus.OK)
     public void atualizarPorIdPatch(@PathVariable Long id,
                                     @RequestBody ClienteRequest cliente) {
-        updateClienteByIdService.atualizarPorId(id, cliente);
+        updateClienteByIdService.atualizarPorId(id, cliente, false);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void atualizarPorIdPut(@PathVariable Long id,
                                   @Valid @RequestBody ClienteRequest cliente) {
-        updateClienteByIdService.atualizarPorId(id, cliente);
+        updateClienteByIdService.atualizarPorId(id, cliente, true);
     }
 
     @DeleteMapping("/{id}")

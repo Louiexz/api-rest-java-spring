@@ -1,5 +1,6 @@
 package com.example.webapp.webapp.service.impl.cliente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -10,23 +11,49 @@ import com.example.webapp.webapp.model.DTO.cliente.ClienteResponse;
 import com.example.webapp.webapp.model.Endereco;
 
 @Service
-public class UpdateClienteById extends ClienteService {
+public class UpdateClienteById extends ClienteService { 
+    public List<Endereco> checarPutEnderecos(ClienteRequest cliente) {
+        List<Endereco> enderecosEncontrados = new ArrayList<>();
+
+        cliente.getCeps().forEach(cep -> {      
+            String replacedCep = cep.replaceAll("\\D", "");
+            enderecosEncontrados.add(enderecosService.salvar(replacedCep));
+        });
+        
+        return enderecosEncontrados;
+    }
+
+    public List<Endereco> checarPatchEnderecos(ClienteRequest cliente, Cliente clienteToUpdate) {
+        List<Endereco> enderecos = clienteToUpdate.getEnderecos();
+
+        cliente.getCeps().forEach(cep -> {
+            String replacedCep = cep.replaceAll("\\D", "");
+            
+            boolean existe = enderecos.stream()
+                .anyMatch(endereco -> endereco.getCep().equals(replacedCep));
+
+            if (!existe) {
+                clienteToUpdate.adicionarEndereco(
+                    enderecosService.salvar(replacedCep)
+                );
+            }
+        });
+        
+        return clienteToUpdate.getEnderecos();
+    }
     
-    public ClienteResponse atualizarPorId(Long id, ClienteRequest cliente) {
+    public ClienteResponse atualizarPorId(Long id, ClienteRequest cliente, boolean isPut) {
         Cliente clienteToUpdate = getClienteById(id);
 
-        if (cliente.getEnderecos() != null) {
-            List<Endereco> enderecos = clienteToUpdate.getEnderecos();
-
-            for (String cepIn : cliente.getEnderecos()) {
-                boolean existe = enderecos.stream()
-                    .anyMatch(endereco -> endereco.getCep().equals(cepIn));
-
-                if (!existe) {
-                    clienteToUpdate.adicionarEndereco(
-                        adicionarEnderecoPorCep(cepIn)
-                    );
-                }
+        if (cliente.getCeps() != null) {
+            if (isPut) {
+                clienteToUpdate.setEnderecos(checarPutEnderecos(cliente));
+            } else {
+                clienteToUpdate.setEnderecos(checarPatchEnderecos(cliente, clienteToUpdate));
+            }
+        } else {
+            if (isPut) {
+                clienteToUpdate.setEnderecos(new ArrayList<>());
             }
         }
 
@@ -43,7 +70,7 @@ public class UpdateClienteById extends ClienteService {
             !cliente.getSenha().isBlank()) 
         {
             clienteToUpdate.setSenha(cliente.getSenha());
-        }        
+        }
 
         clientesRepositorio.save(clienteToUpdate);
 
