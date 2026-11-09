@@ -2,11 +2,14 @@ package com.example.webapp.webapp.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -15,11 +18,12 @@ import jakarta.persistence.Table;
 @Table(name = "clientes")
 public class Cliente {    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
+    @Column(nullable = false)
     private String nome;
     @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
     private String senha;
     
     @OneToMany
@@ -28,45 +32,50 @@ public class Cliente {
     public Cliente() {}
 
     public Cliente(String nome, String email, String senha) {
+        this.id = UUID.randomUUID();
         this.nome = nome;
         this.email = email;
-        this.senha = senha;
+        setSenha(senha);
     }
 
-    public Long getId() {
+    public final UUID getId() {
         return id;
     }
-    public void setId(Long id) {
+    public final void setId(UUID id) {
         this.id = id;
     }
-    public String getNome() {
+    public final String getNome() {
         return nome;
     }
-    public void setNome(String nome) {
+    public final void setNome(String nome) {
         this.nome = nome;
     }
-    public String getEmail() {
+    public final String getEmail() {
         return email;
     }
-    public void setEmail(String email) {
+    public final void setEmail(String email) {
         this.email = email;
     }
-    public String getSenha() {
+    public final String getSenha() {
         return senha;
     }
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public final void setSenha(String senha) {        
+        this.senha = passwordEncoder().encode(senha);
     }
-    public List<Endereco> getEnderecos() {
+    public final List<Endereco> getEnderecos() {
         return enderecos;
     }
-    public void setEnderecos(List<Endereco> enderecos) {
+    public final void setEnderecos(List<Endereco> enderecos) {
         this.enderecos = enderecos;
     }
-    public void adicionarEndereco(Endereco endereco) {
+    public final void adicionarEndereco(Endereco endereco) {
         this.enderecos.add(endereco);
     }
-    public void removerEndereco(Endereco endereco) {
+    public final void removerEndereco(Endereco endereco) {
         this.enderecos.remove(endereco);
+    }
+    @Bean
+    public static PasswordEncoder passwordEncoder() {
+        return Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8(); // cost factor 12 (~300ms)
     }
 }

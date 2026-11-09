@@ -1,5 +1,7 @@
 package com.example.webapp.webapp.controller;
 
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -48,14 +50,16 @@ public class ClienteController {
     @GetMapping()
     public ResponseEntity<ClienteResponse> procurarPorId(Authentication authentication) {
         return ResponseEntity.ok(
-            getClienteByIdService.execute(Long.valueOf((String) authentication.getPrincipal())));
+            getClienteByIdService.execute(UUID.fromString((String) authentication.getPrincipal())));
     }
     
     @PatchMapping()
     @ResponseStatus(HttpStatus.OK)
     public void atualizarPorIdPatch(@RequestBody ClienteRequest cliente,
             Authentication authentication) {
-        updateClienteByIdService.execute(Long.valueOf((String) authentication.getPrincipal()), cliente, false);
+        updateClienteByIdService.execute(
+            UUID.fromString((String) authentication.getPrincipal()),
+            cliente, false);
     }
 
     @PutMapping()
@@ -63,12 +67,13 @@ public class ClienteController {
     public void atualizarPorIdPut(@Valid @RequestBody ClienteRequest cliente,
             Authentication authentication) {
         updateClienteByIdService.execute(
-            Long.valueOf((String) authentication.getPrincipal()), cliente, true);
+            UUID.fromString((String) authentication.getPrincipal()),
+            cliente, true);
     }
 
     @DeleteMapping()
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletarPorId(Authentication authentication) {
-        deleteClienteByIdService.execute(Long.valueOf((String) authentication.getPrincipal()));
+        deleteClienteByIdService.execute(UUID.fromString((String) authentication.getPrincipal()));
     }
 }

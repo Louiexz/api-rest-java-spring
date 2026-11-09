@@ -22,6 +22,7 @@ import io.jsonwebtoken.security.SignatureException;
 @Service
 public class JwtTokenService {
     private static final String SECRET_KEY = EnvConfig.get("JWT_SECRET");
+    private static final String JWT_EXPIRATION = EnvConfig.get("JWT_EXPIRATION");
 
     private final Set<String> blacklist = new HashSet<>();
 
@@ -30,8 +31,10 @@ public class JwtTokenService {
             SECRET_KEY.getBytes(StandardCharsets.UTF_8)
         );
 
+    private static final long JWT_EXPIRATION_MILLIS = Long.parseLong(JWT_EXPIRATION);
+
     public String generateToken(String id, String user) {
-        Instant expiration = Instant.now().plusMillis(Long.getLong((EnvConfig.get("JWT_EXPIRATION"))));
+        Instant expiration = Instant.now().plusMillis(JWT_EXPIRATION_MILLIS);
 
         return Jwts.builder()
             .setSubject(id)

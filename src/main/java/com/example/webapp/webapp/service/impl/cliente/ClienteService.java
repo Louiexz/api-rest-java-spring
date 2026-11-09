@@ -1,5 +1,7 @@
 package com.example.webapp.webapp.service.impl.cliente;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.webapp.webapp.model.Cliente;
@@ -16,7 +18,7 @@ public class ClienteService {
     @Autowired
     protected EnderecoService enderecosService;
 
-    public Cliente getClienteById(Long id) {
+    public Cliente getClienteById(UUID id) {
         Cliente cliente = clientesRepositorio
             .findById(id)
             .orElseThrow(() -> new ClientNotFoundException(id));

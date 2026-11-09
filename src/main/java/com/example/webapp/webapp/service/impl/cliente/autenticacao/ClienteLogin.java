@@ -23,8 +23,8 @@ public class ClienteLogin extends ClienteService {
         }
 
         if (cliente != null) {
-            if(cliente.getSenha().equals(senha)) {
-                return jwtToken.generateToken(String.valueOf(cliente.getId()), usuario);
+            if(Cliente.passwordEncoder().matches(senha, cliente.getSenha())) {
+                return jwtToken.generateToken(cliente.getId().toString(), usuario);
             }
         }
 

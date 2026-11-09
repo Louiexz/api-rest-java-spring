@@ -2,6 +2,7 @@ package com.example.webapp.webapp.service.impl.cliente;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -42,7 +43,7 @@ public class UpdateClienteById extends ClienteService {
         return clienteToUpdate.getEnderecos();
     }
     
-    public ClienteResponse execute(Long id, ClienteRequest cliente, boolean isPut) {        
+    public ClienteResponse execute(UUID id, ClienteRequest cliente, boolean isPut) {        
         Cliente clienteToUpdate = getClienteById(id);
 
         if (cliente.getCeps() != null) {
